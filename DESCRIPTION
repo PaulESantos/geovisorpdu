@@ -21,3 +21,5 @@ Suggests:
     testthat,
     rsconnect,
     renv
+URL: https://github.com/PaulESantos/geovisorpdu
+BugReports: https://github.com/PaulESantos/geovisorpdu/issues
