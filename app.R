@@ -13,9 +13,13 @@ suppressPackageStartupMessages({
   library(htmltools)
   library(ggplot2)
   library(knitr)
-  library(quarto)
   library(pagedown)
 })
+
+# Carga segura del paquete quarto si está presente
+if (requireNamespace("quarto", quietly = TRUE)) {
+  suppressPackageStartupMessages(library(quarto))
+}
 
 options(shiny.maxRequestSize = 25 * 1024^2)
 source("R/spatial_utils.R", local = TRUE)
@@ -1922,13 +1926,39 @@ server <- function(input, output, session) {
       
       saveRDS(payload, temp_rds)
       
-      quarto::quarto_render(
-        input = "constancia_pdu_template.qmd",
-        output_file = basename(temp_pdf_out),
-        execute_params = list(data_rds = temp_rds),
-        output_format = "typst",
-        quiet = TRUE
-      )
+      render_ok <- FALSE
+      
+      # Opción A: A través del paquete R quarto
+      if (requireNamespace("quarto", quietly = TRUE)) {
+        tryCatch({
+          quarto::quarto_render(
+            input = "constancia_pdu_template.qmd",
+            output_file = basename(temp_pdf_out),
+            execute_params = list(data_rds = temp_rds),
+            output_format = "typst",
+            quiet = TRUE
+          )
+          render_ok <- TRUE
+        }, error = function(e) {
+          render_ok <- FALSE
+        })
+      }
+      
+      # Opción B: A través del CLI directo de Quarto del sistema
+      if (!render_ok && nzchar(Sys.which("quarto"))) {
+        tryCatch({
+          system2(
+            "quarto",
+            args = c(
+              "render", "constancia_pdu_template.qmd",
+              "--to", "typst",
+              "--output", basename(temp_pdf_out),
+              "-P", paste0("data_rds:", temp_rds)
+            ),
+            stdout = FALSE, stderr = FALSE
+          )
+        }, error = function(e) NULL)
+      }
       
       generado <- file.path(dirname("constancia_pdu_template.qmd"), basename(temp_pdf_out))
       if (!file.exists(generado) && file.exists(temp_pdf_out)) generado <- temp_pdf_out
