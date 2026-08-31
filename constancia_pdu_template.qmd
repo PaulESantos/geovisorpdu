@@ -1,0 +1,295 @@
+---
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 1.2cm
+      top: 2.2cm
+      bottom: 1.5cm
+    mainfont: "Arial"
+    fontsize: 8.2pt
+params:
+  data_rds: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+if (nzchar(params$data_rds) && file.exists(params$data_rds)) {
+  dat <- readRDS(params$data_rds)
+} else {
+  dat <- list(
+    codigo_consulta = "PDU-ANTA-CONSULTA",
+    fecha_hora = format(Sys.time(), "%d/%m/%Y %H:%M"),
+    distrito = "Anta",
+    ambito_pdu = "SÍ (Dentro del Ámbito Reglamentado PDU Anta)",
+    es_poligono = FALSE,
+    coords_utm = "E: 808,450.00 m | N: 8,515,200.00 m",
+    coords_geo = "Lat: -13.4600° | Lng: -72.1500°",
+    area_m2 = "N/A",
+    area_has = "N/A",
+    perimetro_m = "N/A",
+    pct_en_ambito = "100.00",
+    servidumbre_at = "No",
+    servidumbre_ffcc = "No",
+    tabla_zonif = data.frame(),
+    tabla_vias = data.frame(),
+    lista_parametros = list(),
+    mapa_path = "",
+    escudo_path = "logo/ESCUDO MUNI ANTA.png",
+    logo_pdu_path = "logo/pdu_actualizado_sf.png"
+  )
+}
+
+# Asegurar rutas relativas válidas para los logos
+escudo_rel <- if (file.exists("logo/ESCUDO MUNI ANTA.png")) "logo/ESCUDO MUNI ANTA.png" else if (file.exists("www/escudo_muni_anta.png")) "www/escudo_muni_anta.png" else ""
+logo_pdu_rel <- if (file.exists("logo/pdu_actualizado_sf.png")) "logo/pdu_actualizado_sf.png" else if (file.exists("logo/pdu_actualizado.png")) "logo/pdu_actualizado.png" else if (file.exists("www/pdu_actualizado_sf.png")) "www/pdu_actualizado_sf.png" else ""
+```
+
+```{=typst}
+#set text(lang: "es", size: 8.2pt)
+#set par(justify: true, leading: 0.45em)
+
+// Encabezado y Pie de página oficiales
+#set page(
+  header: [
+    #grid(
+      columns: (45pt, 1fr, 55pt),
+      align: (left + horizon, center + horizon, right + horizon),
+      [
+        #if "`r escudo_rel`" != "" [
+          #image("`r escudo_rel`", height: 30pt)
+        ]
+      ],
+      [
+        #text(weight: "bold", size: 8.5pt, fill: rgb("#006633"))[MUNICIPALIDAD PROVINCIAL DE ANTA]\
+        #text(weight: "bold", size: 7.2pt, fill: rgb("#B88808"))[GERENCIA DE DESARROLLO URBANO Y RURAL]\
+        #text(size: 6.8pt, fill: rgb("#334155"))[SISTEMA DE INFORMACIÓN TERRITORIAL — GEOVISOR PDU ANTA (2024 - 2034)]
+      ],
+      [
+        #if "`r logo_pdu_rel`" != "" [
+          #image("`r logo_pdu_rel`", height: 28pt)
+        ]
+      ]
+    )
+    #v(-3pt)
+    #line(length: 100%, stroke: 1.2pt + rgb("#008800"))
+  ],
+  footer: [
+    #line(length: 100%, stroke: 0.5pt + rgb("#CBD5E1"))
+    #v(1pt)
+    #grid(
+      columns: (1fr, auto),
+      align: (left + horizon, right + horizon),
+      [
+        #text(size: 6.5pt, fill: rgb("#64748B"))[
+          *Municipalidad Provincial de Anta* — Gerencia de Desarrollo Urbano y Rural | *Consulta:* `r dat$fecha_hora` | *Cód:* `r dat$codigo_consulta`
+        ]
+      ],
+      [
+        #text(size: 6.5pt, fill: rgb("#64748B"), weight: "bold")[
+          #context [ Página #counter(page).display("1 de 1", both: true) ]
+        ]
+      ]
+    )
+  ]
+)
+
+#v(-6pt)
+#align(center)[
+  #text(weight: "bold", size: 10.5pt, fill: rgb("#006633"))[CONSTANCIA INFORMATIVA DE ZONIFICACIÓN Y PARÁMETROS URBANÍSTICOS]\
+  #text(size: 7.5pt, fill: rgb("#64748B"), weight: "bold")[PLAN DE DESARROLLO URBANO DE ANTA (PDU 2024 - 2034)]
+]
+#v(1pt)
+
+#block(
+  fill: rgb("#FFF7D6"),
+  inset: (x: 8pt, y: 4pt),
+  radius: 3pt,
+  stroke: 0.5pt + rgb("#B88808"),
+  width: 100%,
+  [
+    #text(size: 6.8pt)[
+      *Proyecto:* _«Mejoramiento de los Servicios de Gestión Territorial y Desarrollo Urbano Sostenible, del distrito de Anta, provincia de Anta, departamento del Cusco»_ \
+      *Identificador de Consulta:* #text(weight: "bold", fill: rgb("#006633"))[`r dat$codigo_consulta`] | *Fecha y Hora:* `r dat$fecha_hora`
+    ]
+  ]
+)
+
+#v(2pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8pt)[RESUMEN DE IDENTIFICACIÓN CARTOGRÁFICA]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(1pt)
+```
+
+```{r}
+#| results: 'asis'
+if (isTRUE(dat$es_poligono)) {
+  cat(paste0(
+    "| Parámetro | Detalle | Parámetro | Detalle |\n",
+    "| :--- | :--- | :--- | :--- |\n",
+    "| **Área del Predio:** | ", dat$area_m2, " m² (", dat$area_has, " ha) | **Perímetro Total:** | ", dat$perimetro_m, " ml |\n",
+    "| **Distrito(s):** | ", paste(dat$distrito, collapse = ", "), " (Anta, Cusco) | **Ámbito PDU Anta:** | ", dat$pct_en_ambito, "% en ámbito |\n\n"
+  ))
+} else {
+  cat(paste0(
+    "| Parámetro | Detalle | Parámetro | Detalle |\n",
+    "| :--- | :--- | :--- | :--- |\n",
+    "| **Distrito:** | ", dat$distrito, " (Anta, Cusco) | **Ámbito PDU:** | ", dat$ambito_pdu, " |\n",
+    "| **Coordenadas UTM 18S:** | ", dat$coords_utm, " | **Coordenadas WGS84:** | ", dat$coords_geo, " |\n\n"
+  ))
+}
+```
+
+```{=typst}
+#v(-2pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8pt)[PLANO DE UBICACIÓN Y ZONIFICACIÓN DEL PREDIO (LÁMINA CARTOGRÁFICA OFICIAL)]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(1pt)
+```
+
+```{r}
+#| results: 'asis'
+if (nzchar(dat$mapa_path) && file.exists(dat$mapa_path)) {
+  rel_path <- gsub("^\\./", "", dat$mapa_path)
+  cat(sprintf("![](%s){fig-align='center' width=100%%}\n\n", rel_path))
+}
+```
+
+```{=typst}
+#pagebreak()
+
+#v(-4pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8.5pt)[1. DESGLOSE DE ZONIFICACIÓN Y USOS DE SUELO EN EL PREDIO]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(2pt)
+```
+
+```{r}
+#| results: 'asis'
+tz <- dat$tabla_zonif
+if (!is.null(tz) && is.data.frame(tz) && nrow(tz) > 0) {
+  cat("| Zona PDU | Subzona / Descripción | Área Ocupada (m²) | % del Lote |\n")
+  cat("| :--- | :--- | :--- | :--- |\n")
+  for (i in 1:nrow(tz)) {
+    cat(sprintf("| **%s** | %s - %s | %s m² | **%s%%** |\n",
+                tz$COD_ZONA[i], tz$COD_S_ZONA[i], tz$SUB_ZONA[i],
+                format(tz$AREA_M2[i], big.mark = ","), tz$PCT_LOTE[i]))
+  }
+  cat("\n")
+} else {
+  cat("_No se identificó zonificación reglamentada dentro del predio o punto consultado._\n\n")
+}
+```
+
+```{=typst}
+#v(2pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8.5pt)[2. SISTEMA VIAL PROPUESTO Y SECCIÓN VIAL (SV)]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(2pt)
+```
+
+```{r}
+#| results: 'asis'
+tv <- dat$tabla_vias
+if (!is.null(tv) && is.data.frame(tv) && nrow(tv) > 0) {
+  cat("| Jerarquía del Sistema Vial | Código de Vía | Sección Normativa (SV) | Distancia al Predio |\n")
+  cat("| :--- | :--- | :--- | :--- |\n")
+  for (i in 1:nrow(tv)) {
+    cat(sprintf("| **%s** | %s | **%s** | %s m |\n",
+                tv$SIS_VIAL[i], tv$COD_VIA_PR[i], tv$SECCION_VI[i], tv$DISTANCIA_M[i]))
+  }
+  cat("\n")
+} else {
+  cat("_No se registran vías propuestas del PDU dentro del área de influencia directa (buffer de 25 metros)._\n\n")
+}
+```
+
+```{=typst}
+#block(
+  fill: rgb("#F8FAFC"),
+  inset: (x: 6pt, y: 3pt),
+  radius: 2pt,
+  stroke: (left: 2.5pt + rgb("#008800")),
+  width: 100%,
+  [
+    #text(size: 6.6pt, style: "italic", fill: rgb("#475569"))[
+      *Nota Metodológica:* Las vías del Sistema Vial Propuesto mostradas corresponden a los ejes normativos identificados dentro de un área de influencia directa (buffer de 25 metros) respecto al perímetro del predio o punto consultado.
+    ]
+  ]
+)
+
+#v(2pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8.5pt)[3. CONDICIONANTES Y AFECTACIONES DE INFRAESTRUCTURA]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(2pt)
+```
+
+```{r}
+#| results: 'asis'
+sat <- dat$servidumbre_at
+sffcc <- dat$servidumbre_ffcc
+
+if (is.character(sat) && nzchar(sat) && sat != "No" && !grepl("Sin afectación", sat)) {
+  cat(paste0("- **⚠️ ALERTA DE SERVIDUMBRE ELÉCTRICA:** ", sat, "\n"))
+} else {
+  cat("- ✓ Sin afectación por fajas de servidumbre de líneas de alta tensión (CNE).\n")
+}
+
+if (is.character(sffcc) && nzchar(sffcc) && sffcc != "No" && !grepl("Sin proximidad", sffcc)) {
+  cat(paste0("- **⚠️ ALERTA DE ÁREA FERROVIARIA REFERENCIAL:** ", sffcc, "\n"))
+} else {
+  cat("- ✓ Sin proximidad al área de seguridad ferroviaria referencial (D.S. 032-2005-MTC).\n")
+}
+cat("\n")
+```
+
+```{=typst}
+#v(2pt)
+#text(fill: rgb("#006633"), weight: "bold", size: 8.5pt)[4. PARÁMETROS URBANÍSTICOS Y EDIFICATORIOS NORMATIVOS]
+#v(-3pt)
+#line(length: 100%, stroke: 0.8pt + rgb("#98C838"))
+#v(2pt)
+```
+
+```{r}
+#| results: 'asis'
+lp <- dat$lista_parametros
+if (!is.null(lp) && length(lp) > 0) {
+  for (p in lp) {
+    cat(sprintf("#### Subzona: **%s** — %s\n", p$COD_S_ZONA, p$NOMBRE_COMPLETO))
+    if (!is.null(p$AREA_AFECTADA_M2) && !is.null(p$PCT_AFECTADO)) {
+      cat(sprintf("_Ocupación en el lote: %s m² (%s%%)_\n\n", p$AREA_AFECTADA_M2, p$PCT_AFECTADO))
+    }
+    cat("| Parámetro Normativo | Valor Reglamentario |\n")
+    cat("| :--- | :--- |\n")
+    cat(sprintf("| **Densidad Neta Máxima:** | %s |\n", p$DENSIDAD_NETA_MAX))
+    cat(sprintf("| **Lote Normativo Mínimo:** | %s |\n", p$LOTE_MINIMO))
+    cat(sprintf("| **Frente Mínimo:** | %s |\n", p$FRENTE_MINIMO))
+    cat(sprintf("| **Altura Máxima de Edificación:** | **%s** |\n", p$ALTURA_MAXIMA))
+    cat(sprintf("| **Área Libre Mínima (%%):** | %s |\n", p$AREA_LIBRE_MIN))
+    cat(sprintf("| **Coeficiente de Edificación:** | %s |\n", p$COEFICIENTE_EDIF))
+    cat(sprintf("| **Retiro Frontal Obligatorio:** | %s |\n", p$RETIRO_FRONTAL))
+    cat(sprintf("| **Estado de Validación:** | %s |\n", p$ESTADO_VALIDACION))
+    cat(sprintf("| **Usos Permitidos y Compatibles:** | %s |\n\n", p$USOS_PERMITIDOS))
+  }
+} else {
+  cat("_No se registran parámetros urbanísticos específicos aplicables para la consulta realizada._\n\n")
+}
+```
+
+```{=typst}
+#v(1fr)
+#line(length: 100%, stroke: 0.5pt + rgb("#CBD5E1"))
+#v(1pt)
+#align(center)[
+  #text(size: 6.2pt, fill: rgb("#64748B"))[
+    *Documento de carácter exclusivamente informativo y referencial.* Expedido por el Geovisor Oficial del Plan de Desarrollo Urbano de Anta (PDU 2024 - 2034). No constituye acto administrativo, no genera derechos urbanísticos ni sustituye los Certificados de Parámetros Urbanísticos y Edificatorios ni las Licencias de Habilitación Urbana o Edificación emitidas por la Municipalidad Provincial de Anta conforme al TUO de la Ley N° 29090 y el Reglamento Nacional de Edificaciones (RNE).
+  ]
+]
+```

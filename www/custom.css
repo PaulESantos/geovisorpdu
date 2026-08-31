@@ -1,0 +1,420 @@
+/* ==========================================================================
+   ESTILOS INSTITUCIONALES - GEOVISOR PDU ANTA (2024 - 2034)
+   Paleta institucional sobria: verde bosque, pizarra y oro apagado
+   ========================================================================== */
+
+:root {
+  --verde-inst: #1F5137;
+  --verde-pdu: #5F7F6C;
+  --verde-oscuro: #163A2A;
+  --dorado-inst: #A27C3E;
+  --amarillo-pdu: #E8DFC8;
+  --naranja-alerta: #B46A2C;
+  --rojo-pdu: #A33A3A;
+  --carbon-texto: #263238;
+  --pizarra: #52616B;
+  --pizarra-oscuro: #33434D;
+  --blanco: #FFFFFF;
+  --gris-claro: #F4F6F5;
+  --crema-inst: #F7F3E8;
+  
+  --primary-pdu: var(--verde-inst);
+  --secondary-pdu: var(--verde-pdu);
+  --bg-card: rgba(255, 255, 255, 0.97);
+  --border-radius: 10px;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--carbon-texto);
+  background-color: var(--gris-claro);
+}
+
+.navbar {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-bottom: 3px solid var(--verde-inst);
+  box-shadow: 0 4px 18px rgba(22, 58, 42, 0.10);
+  backdrop-filter: blur(10px);
+  z-index: 1050;
+}
+
+/* Navegacion siempre visible sobre el encabezado blanco. */
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-nav .nav-link:visited {
+  color: var(--pizarra-oscuro) !important;
+  opacity: 1 !important;
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  margin-inline: 0.1rem;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link:focus-visible {
+  color: var(--verde-oscuro) !important;
+  background-color: #EAF0EC !important;
+}
+
+.navbar .navbar-nav .nav-link.active,
+.navbar .navbar-nav .show > .nav-link {
+  color: var(--verde-oscuro) !important;
+  background-color: #DFE9E2 !important;
+  box-shadow: inset 0 -3px 0 var(--verde-inst);
+}
+
+.navbar .navbar-nav .nav-link .fa,
+.navbar .navbar-nav .nav-link .fas,
+.navbar .navbar-nav .nav-link svg {
+  color: var(--verde-inst) !important;
+}
+
+/* Pestañas internas y botones: contraste AA sobre fondos claros. */
+.nav-tabs .nav-link,
+.nav-pills .nav-link {
+  color: var(--pizarra-oscuro) !important;
+  opacity: 1 !important;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-pills .nav-link:hover {
+  color: var(--verde-oscuro) !important;
+  background-color: #EAF0EC;
+}
+
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active {
+  color: var(--blanco) !important;
+  background-color: var(--verde-inst) !important;
+  border-color: var(--verde-inst) !important;
+}
+
+.btn-success,
+.btn-primary {
+  --bs-btn-bg: var(--verde-inst);
+  --bs-btn-border-color: var(--verde-inst);
+  --bs-btn-hover-bg: var(--verde-oscuro);
+  --bs-btn-hover-border-color: var(--verde-oscuro);
+  --bs-btn-active-bg: var(--verde-oscuro);
+  --bs-btn-active-border-color: var(--verde-oscuro);
+  background-color: var(--verde-inst) !important;
+  border-color: var(--verde-inst) !important;
+}
+
+.btn-success:hover,
+.btn-primary:hover,
+.btn-success:focus,
+.btn-primary:focus {
+  background-color: var(--verde-oscuro) !important;
+  border-color: var(--verde-oscuro) !important;
+}
+
+.btn-outline-success {
+  --bs-btn-color: var(--verde-inst);
+  --bs-btn-border-color: var(--verde-inst);
+  --bs-btn-hover-bg: var(--verde-inst);
+  --bs-btn-hover-border-color: var(--verde-inst);
+  --bs-btn-active-bg: var(--verde-oscuro);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--verde-inst);
+}
+
+.bslib-sidebar-layout > .sidebar {
+  border-right: 1px solid #dbe5dd;
+  box-shadow: 5px 0 20px rgba(0, 66, 33, 0.06);
+}
+
+.reporte-disclaimer {
+  color: #5F4B27 !important;
+  background: linear-gradient(135deg, #F5F0E5, #FBFAF6) !important;
+  border-left: 5px solid var(--dorado-inst) !important;
+}
+
+/* Encabezado y Logos */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-left {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.brand-logo-right {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.logo-muni-header {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-pdu-header {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.pdu-badge-title {
+  background: linear-gradient(135deg, var(--verde-inst), var(--verde-oscuro));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--dorado-inst);
+}
+
+/* Botón GPS Móvil Destacado */
+.btn-gps-mobile {
+  background: linear-gradient(135deg, var(--verde-inst), var(--verde-oscuro));
+  color: white;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(31, 81, 55, 0.22);
+  transition: all 0.2s ease;
+}
+
+.btn-gps-mobile:hover {
+  background: linear-gradient(135deg, var(--verde-oscuro), #004d26);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Sidebar y Acordeones */
+.sidebar-section {
+  border-radius: var(--border-radius);
+  background: var(--bg-card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.accordion-button {
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  padding: 12px 16px;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--crema-inst);
+  color: var(--verde-oscuro);
+  border-left: 4px solid var(--dorado-inst);
+}
+
+/* Ficha Técnica de Parámetros */
+.ficha-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.ficha-container:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 66, 33, 0.10);
+}
+
+.ficha-header {
+  padding: 12px 16px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ficha-body {
+  padding: 14px;
+}
+
+.param-table {
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 0.88rem;
+}
+
+.param-table th {
+  width: 45%;
+  background-color: var(--gris-claro);
+  color: var(--carbon-texto);
+  font-weight: 600;
+  padding: 6px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.param-table td {
+  padding: 6px 10px;
+  color: #1e293b;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+/* Bloque y Alertas de Sistema Vial */
+.card-vial-info {
+  background-color: var(--crema-inst);
+  border-left: 5px solid var(--dorado-inst);
+  color: var(--carbon-texto);
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.86rem;
+  margin-bottom: 12px;
+}
+
+.badge-seccion-vial {
+  background: linear-gradient(135deg, var(--dorado-inst), #996c00);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+/* Alertas de Servidumbre */
+.alert-servidumbre {
+  border-left: 5px solid var(--rojo-pdu);
+  background-color: #fdf2f2;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.alert-servidumbre-ferro {
+  border-left: 5px solid var(--naranja-alerta);
+  background-color: #fffbeb;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.alert-ambito-ok {
+  border-left: 5px solid var(--verde-inst);
+  background-color: #f0fdf4;
+  color: var(--verde-oscuro);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.alert-ambito-fuera {
+  border-left: 5px solid var(--rojo-pdu);
+  background-color: #fef2f2;
+  color: #991b1b;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Tabla de Intersección de Polígono */
+.table-poligono-inter {
+  font-size: 0.84rem;
+  margin-bottom: 8px;
+}
+
+.table-poligono-inter th {
+  background-color: var(--verde-oscuro);
+  color: white;
+  padding: 6px 8px;
+}
+
+.table-poligono-inter td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+/* Leyenda flotante */
+.info.legend {
+  padding: 8px 12px;
+  font: 11px/14px Arial, Helvetica, sans-serif;
+  background: rgba(255,255,255,0.94);
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  line-height: 18px;
+  color: #333;
+}
+
+.info.legend i {
+  width: 14px;
+  height: 14px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.85;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .navbar-brand .pdu-badge-title,
+  .navbar-brand small {
+    display: none;
+  }
+
+  .logo-muni-header {
+    height: 34px;
+  }
+
+  .bslib-sidebar-layout > .sidebar {
+    width: min(92vw, 410px) !important;
+  }
+
+  .leaflet-control-layers {
+    max-width: 80vw;
+    font-size: 12px;
+  }
+
+  .param-table {
+    font-size: 0.82rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1400px) {
+  .navbar-brand small {
+    display: none;
+  }
+
+  .navbar .navbar-nav .nav-link {
+    font-size: 0.88rem;
+    padding-inline: 0.55rem;
+  }
+
+  .brand-logo-right {
+    display: none !important;
+  }
+}
+
+/* Botón de descarga de PDF con estilo institucional */
+.btn-download-pdf {
+  background: linear-gradient(135deg, var(--verde-inst), var(--verde-oscuro));
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 2px 6px rgba(31, 81, 55, 0.2);
+}
+
+.btn-download-pdf:hover {
+  background: linear-gradient(135deg, var(--verde-oscuro), #004d26);
+  color: white;
+}

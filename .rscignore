@@ -1,0 +1,15 @@
+.Rproj.user
+.codex_spreadsheet
+outputs
+ejemplos
+scripts
+tests
+shp_pdu_anta
+test_map.png
+.*[.]docx$
+DOCUMENTACION_IMPLEMENTACION.md
+DEPLOY_SHINYAPPS_IO.md
+report_template.Rmd
+.Rhistory
+.git
+.gitignore

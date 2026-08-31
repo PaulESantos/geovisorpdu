@@ -1,0 +1,15 @@
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.codex_spreadsheet/
+outputs/
+renv/library/
+renv/staging/
+rsconnect/
+*.lock
+
+.Rproj.user
+.httr-oauth
+.DS_Store
+.quarto

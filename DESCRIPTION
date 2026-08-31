@@ -1,0 +1,23 @@
+Package: geovisorpdu
+Type: Project
+Title: GeoVisor Informativo PDU Anta 2024-2034
+Version: 0.2.0
+Authors@R: person("Municipalidad Provincial de Anta", role = c("aut", "cph"))
+Description: Aplicacion Shiny de consulta territorial informativa del Plan de Desarrollo Urbano de Anta.
+License: file LICENSE
+Encoding: UTF-8
+Imports:
+    shiny,
+    bslib,
+    leaflet,
+    sf,
+    dplyr,
+    htmltools,
+    ggplot2,
+    knitr,
+    quarto,
+    pagedown
+Suggests:
+    testthat,
+    rsconnect,
+    renv
